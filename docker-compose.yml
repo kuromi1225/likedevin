@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    restart: unless-stopped
+    depends_on:
+      - backend
+    command: npm run dev
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - ./workspace:/app/workspace
+    restart: unless-stopped
+    environment:
+      - OLLAMA_API_URL=http://ollama:11434
+
+  code-editor:
+    image: codercom/code-server:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./workspace:/home/coder/project
+    environment:
+      - PASSWORD=maverick
+      - SUDO_PASSWORD=maverick
+    restart: unless-stopped
+
+  debug-server:
+    image: itzg/minecraft-server
+    ports:
+      - "25565:25565"
+    environment:
+      - EULA=TRUE
+      - TYPE=PAPER
+    volumes:
+      - ./minecraft-data:/data
+    restart: unless-stopped
+
+  ollama:
+    image: ollama/ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./ollama:/root/.ollama
+    restart: unless-stopped
+
+volumes:
+  minecraft-data:

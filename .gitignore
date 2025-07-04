@@ -1,0 +1,29 @@
+# Frontend (Node.js / Next.js)
+/frontend/node_modules/
+/frontend/.next/
+/frontend/out/
+/frontend/*.log
+/frontend/.env*
+!/frontend/.env.example
+
+# Backend (Python)
+/backend/__pycache__/
+/backend/venv/
+/backend/.venv/
+/backend/*.pyc
+/backend/.env*
+!/backend/.env.example
+
+# Docker Composeでマウントされる永続データ
+/ollama/
+/minecraft-data/
+/workspace/
+
+
+# OSが生成するファイル
+.DS_Store
+Thumbs.db
+
+# IDE / Editor設定
+.vscode/
+.idea/
