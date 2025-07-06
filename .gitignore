@@ -9,6 +9,7 @@
 # Backend (Python)
 /backend/__pycache__/
 /backend/venv/
+/backend/node_modules/
 /backend/.venv/
 /backend/*.pyc
 /backend/.env*

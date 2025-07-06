@@ -1,27 +1,21 @@
-# 1. Install dependencies
-FROM node:20-alpine AS deps
-WORKDIR /app
-COPY package.json package-lock.json* ./
-RUN npm install
+# ベースイメージとしてNode.js v20-alpineを使用
+FROM node:20-alpine
 
-# 2. Build application
-FROM node:20-alpine AS builder
+# 作業ディレクトリを設定
 WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+
+# 最初にpackage.jsonとpackage-lock.jsonをコピー
+COPY package*.json ./
+
+# npm ci を使って、package-lock.jsonから依存関係をクリーンインストール
+# これにより、ビルドの再現性が高まります
+RUN npm ci
+
+# アプリケーションのソースコード全体をコピー
 COPY . .
-RUN npm run build
 
-# 3. Production image
-FROM node:20-alpine AS runner
-WORKDIR /app
-
-ENV NODE_ENV=production
-
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./
-
+# 開発サーバー用のポートを開放
 EXPOSE 3000
 
-CMD ["node_modules/.bin/next", "start"]
+# Next.jsの開発サーバーを起動
+CMD ["npm", "run", "dev"]
