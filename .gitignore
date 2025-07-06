@@ -28,3 +28,5 @@ Thumbs.db
 # IDE / Editor設定
 .vscode/
 .idea/
+.aider*
+.env
